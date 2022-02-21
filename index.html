@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  
+  </head>
+  <body >
+    <script type="text/javascript">
+	
+	function getParams() {
+        // This function is anonymous, is executed immediately and 
+        // the return value is assigned to QueryString!
+        var query_string = {};
+        var query = window.location.search.substring(1);
+        console.log(query.length);
+        if (query.length == 0) {
+            //query_string.type = query;
+            return query;
+        }
+		var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            // If first entry with this name
+            if (typeof query_string[pair[0]] === "undefined") {
+                query_string[pair[0]] = decodeURIComponent(pair[1]);
+                // If second entry with this name
+            } else if (typeof query_string[pair[0]] === "string") {
+                var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
+                query_string[pair[0]] = arr;
+                // If third or later entry with this name
+            } else {
+                query_string[pair[0]].push(decodeURIComponent(pair[1]));
+            }
+        }
+        console.log("initParams: " + JSON.stringify(query_string));
+		console.log("Adeela" + query_string);
+        return query_string;
+    }
+	var appmode = getParams();
+	if(appmode.appmode == "1")
+	{	
+		//var url = parent.document.getElementById("main").src;
+		var url = window.location.href;
+		var version = getParameterByName('versionno');
+		var lastPart = url.split("/").pop();
+		url = url.replace(lastPart,"story.html?versionno="+version);
+		console.log(url);
+		if(url.indexOf('/blobproxy/') < 0){	
+			window.location.href = url;
+		}else{
+			parent.document.getElementById("main").src = url;
+		}
+		
+	}
+	else if(appmode.appmode == "2" || appmode.appmode == "3")
+	{
+		var url = window.location.href;
+		var version = getParameterByName('versionno');
+		var lastPart = url.split("/").pop();
+		url = url.replace(lastPart,"offline/story.html?versionno="+version);
+
+		//parent.document.getElementById("main").src = url;
+		if(url.indexOf('/blobproxy/') < 0){
+			
+			window.location.href = url;
+		}else{
+			parent.document.getElementById("main").src = url;
+		}
+	}
+	else
+	{
+		//var url = parent.document.getElementById("main").src;
+		var url = window.location.href;
+		var lastPart = url.split("/").pop();
+		url = url.replace(lastPart,"story.html");
+
+		//if(url.indexOf('/blobproxy/') < 0){	
+			window.location.href = url;
+		//}else{
+			//parent.document.getElementById("main").src = url;
+		//}		
+	}
+
+	function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    url = url.replace(/&amp;/g, '&');
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+	}
+	
+  </script>
+  </body>
+</html>
